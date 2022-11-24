@@ -134,3 +134,8 @@ variable "lb_egress_cidrblock_list"                     {
                                                         type = list
                                                         default = null
                                                         }
+variable "lb_idle_timeout"                              { default = 300 }
+variable "lb_stickiness_duration"                       {
+                                                        type    = number
+                                                        default = 86400
+                                                        }
