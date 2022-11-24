@@ -139,3 +139,30 @@ variable "lb_stickiness_duration"                       {
                                                         type    = number
                                                         default = 86400
                                                         }
+variable "key_name"                                         {
+                                                        type       = string
+                                                        }
+
+variable "algorithm"                                    {
+                                                        type       = string
+                                                        default    = "RSA"
+                                                        }
+
+variable "rsa_bits"                                     {
+                                                        type       = number
+                                                        default    = 2048
+                                                        }
+variable "ecdsa_curve"                                  {
+                                                        type       = string
+                                                        default    = "P224"
+                                                        }
+
+variable "use_prefix"                                   {
+                                                        type       = bool
+                                                        default    = false
+                                                        }
+
+variable "extra_tags" {
+    type       = map(string)
+    default    = {}
+}

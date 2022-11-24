@@ -1,5 +1,5 @@
 module "network" {
-source                  = ../modules/network
+source                  = "../modules/network"
 org_name                = "org-1"
 env                     = "dev"
 vpc_cidr_block          = "10.0.0.0/16"
@@ -22,7 +22,7 @@ tetiary_extra_tags      = {
 }
 
 module "web-app" {
-source                                      = ../modules/web
+source                                      = "../modules/web"
 service                                     = "web"
 env                                         = "dev"
 name                                        = "app1"

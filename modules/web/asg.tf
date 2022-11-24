@@ -1,3 +1,16 @@
+resource "tls_private_key" "main" {
+    algorithm                                   =   var.algorithm
+    rsa_bits                                    =   var.rsa_bits
+    ecdsa_curve                                 =   var.ecdsa_curve
+}
+
+resource "aws_key_pair" "main" {
+    key_name                                    =   var.use_prefix ? null : var.name
+    key_name_prefix                             =   var.use_prefix ? var.key_name : null
+    public_key                                  =   tls_private_key.main.public_key_openssh
+    tags                                        =   local.common_tags
+}
+
 resource "aws_launch_configuration" "main" {
   name_prefix                 = "${substr(var.name, 0, 4)}-"
   image_id                    = var.instance_ami
