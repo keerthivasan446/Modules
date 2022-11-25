@@ -1,3 +1,9 @@
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
 module "network" {
   source                = "../modules/network"
   org_name              = "org-1"
@@ -68,4 +74,37 @@ module "web-app" {
   lb_ingress_proto            = ["HTTPS"]
   assume_role_policy          = data.aws_iam_policy_document.assume.json
   iam_role_policy             = data.aws_iam_policy_document.web.json
+}
+
+module "org-db" {
+
+  source                                                    = "../modules/rds"
+  org_name                                                  = "org-1"
+  env                                                       = "dev"
+  name                                                      = "app"
+  instance_class                                            = "db.mg.large"
+  iops                                                      = "10000"
+  allocated_storage                                         = 100
+  storage_type                                              = "io1"
+  storage_encrypted                                         = true
+  allow_major_version_upgrade                               = true
+  auto_minor_version_upgrade                                = true
+  apply_immediately                                         = false
+  backup_retention_period                                   = 7
+  backup_window                                             = "22:59-23:59"
+  maintenance_window                                        = "Sun:01:00-Sun:03:00"
+  copy_tags_to_snapshot                                     = true
+  cloudwatch_logs_exports                                   = ["error", "general", "slowquery"]
+  engine                                                    = "MySQL"
+  engine_version                                            = "8.0"
+  iam_authentication_enabled                                = false
+  username                                                  = "dbadmin"
+  admin_password                                            = random_password.password.result
+  multi_az                                                  = true
+  skip_final_snapshot                                       = true
+  subnet_ids                                                = module.network.tertiary_subnet_ids
+  vpc_id                                                    = module.network.vpc_id
+  ingress_security_groups                                   = [module.web-app.lb_security_group]
+  db_port                                                   = 3306
+  db_ingress_asg_protocol                                   = "TCP"
 }
