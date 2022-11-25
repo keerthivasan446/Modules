@@ -40,3 +40,28 @@ variable "tertiary_extra_tags"                          {
                                                         type = map
                                                         default = {}
                                                         }
+variable "igw_enabled"                                  {
+                                                        type = bool
+                                                        default = false
+                                                        }
+variable "igw_name"                                     {
+                                                        type = string
+                                                        }
+variable "public_subnet_name"                          {}
+variable "public_subnet_cidr"                          {
+                                                        type = list
+                                                        default = null
+                                                        }
+variable "public_extra_tags"                            {
+                                                        type = map
+                                                        default = {}
+                                                        }
+variable "igw_extra_tags"                               {
+                                                        type = map
+                                                        default = {}
+                                                        }
+variable "destination_cidr_block"                       { 
+                                                        type = string 
+                                                        default = "0.0.0.0/0"    
+                                                        }
+variable "rt_name"                                      { type = string }                                  

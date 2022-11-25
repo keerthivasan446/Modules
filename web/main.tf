@@ -8,6 +8,7 @@ module "network" {
   source                = "../modules/network"
   org_name              = var.org_name
   env                   = var.env
+  igw_enabled           = var.igw_enabled
   vpc_cidr_block        = var.vpc_cidr_block
   availability_zone     = var.availability_zone
   primary_subnet_name   = var.primary_subnet_name

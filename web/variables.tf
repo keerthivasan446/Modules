@@ -2,6 +2,7 @@ variable "org_name" { type = string }
 variable "name" { type = string }
 variable "env" { type = string }
 variable "vpc_cidr_block" { type = string }
+variable "igw_enabled" { type = bool }
 variable "availability_zone" { type = list(string) }
 variable "primary_subnet_name" { type = string }
 variable "primary_subnet_cidr" { type = list(string) }

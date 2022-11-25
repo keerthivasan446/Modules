@@ -21,3 +21,7 @@ output "secondary_subnet_ids" {
 output "tertiary_subnet_ids" {
   value = aws_subnet.tertiary.*.id
 }
+
+output "igw_id" {
+  value = aws_internet_gateway.gw.id
+}

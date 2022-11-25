@@ -1,6 +1,7 @@
 org_name              = "org-1"
 env                   = "dev"
 vpc_cidr_block        = "10.0.0.0/16"
+igw_enabled           = false
 availability_zone     = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 primary_subnet_name   = "access"
 primary_subnet_cidr   = ["10.1.0.0/24", "10.1.1.0/24", "10.1.2.0/24"]
