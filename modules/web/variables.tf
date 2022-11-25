@@ -1,5 +1,6 @@
 variable "env"                                          {}
 variable "org_name"                                     {}
+variable "vpc_id"                                       {}
 
 #Autoscaling variables
 variable "instance_ami"                                 {}
@@ -13,6 +14,8 @@ variable "instance_additional_sgs"                      {
                                                         }
 variable "name"                                         {}
 variable "service"                                      {}
+variable "assume_role_policy"                           {}
+variable "iam_role_policy"                              {}
 
 
 #load balancer variables
@@ -42,9 +45,10 @@ variable "instance_desired_cap"                         { default = null }
 variable "instance_min_cap"                             { default = null }
 variable "instance_max_cap"                             { default = null }
 variable "health_check_type"                            { default = null }
-variable "extra_targetgroups_arns"                      {}
-
-
+variable "extra_targetgroups_arns"                      {
+                                                        type    = list
+                                                        default = []
+                                                        }
 variable "instance_ingress_source_sg"                   {
                                                         type = list
                                                         default = null
@@ -65,14 +69,9 @@ variable "instance_ingress_sg_proto"                    {
                                                         type = list
                                                         default = null
                                                         }
-variable "instance_ingress_source_sg"                   {
-                                                        type = list
-                                                        default = null
-                                                        }
-
 variable "instance_ingress_cidrblock"                   {
                                                         type = list
-                                                        default = null
+                                                        default = []
                                                         }
 variable "instance_ingress_cidr_rule_description"       {
                                                         type = list
@@ -90,15 +89,11 @@ variable "instance_ingress_cidr_proto"                  {
                                                         type = list
                                                         default = null
                                                         }
-variable "instance_ingress_cidrblock"                   {
+variable "lb_ingress_cidrblock_list"                    {
                                                         type = list
-                                                        default = null
+                                                        default = []
                                                         }
-variable "lb_ingress_cidrblock_list"                   {
-                                                        type = list
-                                                        default = null
-                                                        }
-variable "lb_ingress_rule_description"                   {
+variable "lb_ingress_rule_description"                  {
                                                         type = list
                                                         default = null
                                                         }
@@ -110,29 +105,25 @@ variable "lb_ingress_to_port"                           {
                                                         type = list
                                                         default = null
                                                         }
-variable "lb_egress_cidrblock_list"                     {
-                                                        type = list
-                                                        default = null
-                                                        }
 variable "lb_egress_rule_description"                   {
-                                                        type = list
-                                                        default = null
+                                                        type    = list
+                                                        default = ["default egress rule for load balancer"]
                                                         }
 variable "lb_egress_from_port"                          {
-                                                        type = list
-                                                        default = null
+                                                        type    = list
+                                                        default = [0]
                                                         }
 variable "lb_egress_to_port"                            {
-                                                        type = list
-                                                        default = null
+                                                        type    = list
+                                                        default = [0]
                                                         }
 variable "lb_egress_proto"                              {
-                                                        type = list
-                                                        default = null
+                                                        type    = list
+                                                        default = ["-1"]
                                                         }
-variable "lb_egress_cidrblock_list"                     { 
-                                                        type = list
-                                                        default = null
+variable "lb_egress_cidrblock_list"                     {
+                                                        type    = list
+                                                        default = ["10.0.0.0/8"]
                                                         }
 variable "lb_idle_timeout"                              { default = 300 }
 variable "lb_stickiness_duration"                       {
@@ -162,7 +153,16 @@ variable "use_prefix"                                   {
                                                         default    = false
                                                         }
 
-variable "extra_tags" {
-    type       = map(string)
-    default    = {}
-}
+variable "extra_tags"                                   {
+                                                        type       = map(string)
+                                                        default    = {}
+                                                        }
+variable "bucket_logs_enabled"                          { default = true }
+variable "lb_stickiness_enabled"                        {
+                                                        type    = bool
+                                                        default = true
+                                                        }
+variable "lb_ingress_proto"                             {
+                                                        type    = list
+                                                        default = ["-1"]
+                                                        }

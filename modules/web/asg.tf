@@ -11,6 +11,23 @@ resource "aws_key_pair" "main" {
     tags                                        =   local.common_tags
 }
 
+resource "aws_iam_instance_profile" "main" {
+  name = "${var.service}_${var.env}_${var.name}_profile"
+  role = aws_iam_role.main.name
+}
+
+
+resource "aws_iam_role" "main" {
+  name               = "${var.service}_${var.env}_${var.name}_role"
+  assume_role_policy = var.assume_role_policy
+}
+
+resource "aws_iam_role_policy" "main" {
+  name = "${var.service}_${var.env}_${var.name}_policy"
+  policy = var.iam_role_policy
+  role   = aws_iam_role.main.name
+}
+
 resource "aws_launch_configuration" "main" {
   name_prefix                 = "${substr(var.name, 0, 4)}-"
   image_id                    = var.instance_ami
@@ -70,19 +87,19 @@ resource "aws_autoscaling_group" "main" {
 resource "aws_security_group" "instance" {
   name        = "${var.service}-${var.env}-${var.name}-instance"
   description = "${var.service} ${var.env} ${var.name} instance security group"
-  vpc_id      = resource.aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "${var.service}-${var.env}-${var.name}"
+    tomap(
+      {"Name"="${var.service}-${var.env}-${var.name}"}
     )
   )
 }
 
 resource "aws_security_group_rule" "instance_ingress_sg" {
-  count                    = length(var.) >= 1 ? length(var.instance_ingress_source_sg) : 0
+  count                    = length(var.instance_ingress_source_sg) >= 1 ? length(var.instance_ingress_source_sg) : 0
   type                     = "ingress"
   description              = element(var.instance_ingress_sg_rule_description, count.index)
   from_port                = element(var.instance_ingress_sg_from_port, count.index)

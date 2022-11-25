@@ -25,14 +25,14 @@ output "load_balancer_listener_port" {
   value = aws_lb_listener.main.port
 }
 
-output "route53_record" {
-  value = aws_route53_record.main.*.fqdn
+output "key_name" {
+    value = aws_key_pair.main.key_name
 }
 
-output "aws_iam_role_id" {
-  value = aws_iam_role.main.id
+output "key_arn" {
+    value = aws_key_pair.main.arn
 }
 
-output "aws_iam_role_arn" {
-  value = aws_iam_role.main.arn
+output "key" {
+    value = base64encode(tls_private_key.main.private_key_pem)
 }

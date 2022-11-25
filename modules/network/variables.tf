@@ -27,12 +27,11 @@ variable "secondary_subnet_cidr"                        {
                                                         type = list
                                                         default = null
                                                         }
-variable "primary_extra_tags"                           {
+variable "secondary_extra_tags"                         {
                                                         type = map
                                                         default = {}
                                                         }
-
-variable "tertiary_subnet_name"                        {}
+variable "tertiary_subnet_name"                         {}
 variable "tertiary_subnet_cidr"                         {
                                                         type = list
                                                         default = null

@@ -14,7 +14,7 @@ resource "aws_lb" "main" {
   }
 
   tags = merge(
-    var.common_tags,
+    local.common_tags,
     {
       "Name" = "${var.service}-${var.env}-${var.name}-lb"
     }
@@ -26,7 +26,7 @@ resource "aws_lb_target_group" "main" {
   name        = "${var.service}-${var.env}-${var.name}-tg"
   protocol    = var.lb_target_group_proto
   port        = var.lb_port
-  vpc_id      = resource.aws_vpc.main.id
+  vpc_id      = var.vpc_id
   target_type = var.target_type
 
   health_check {
@@ -66,13 +66,13 @@ resource "aws_security_group" "load_balancer" {
   count       = var.lb_type == "application" ? 1 : 0
   name        = "${var.service}-${var.env}-${var.name}-lb"
   description = "${var.service} ${var.env} ${var.name} lb security group"
-  vpc_id      = resource.aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "${var.service}-${var.env}-${var.name}-lb"
+    tomap(
+      {"Name"="${var.service}-${var.env}-${var.name}-lb"}
     )
   )
 }
